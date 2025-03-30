@@ -20,6 +20,12 @@ class GameManager
     private Bomb b3;
     private Bomb b4;
     private Bomb b5;
+    private Bomb b6;
+    private Bomb b7;
+    private Bomb b8;
+    private Bomb b9;
+    private Bomb b10;
+    private Life l;
     private int _points = 0;
     private int _lives = 3;
     
@@ -65,16 +71,22 @@ class GameManager
     private void InitializeGame()
     {
         p = new Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50);
-        t1 = new Treasure(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(1,10), new Random().Next(3,7));
-        t2 = new Treasure(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(1,10), new Random().Next(3,7));
-        t3 = new Treasure(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(1,10), new Random().Next(3,7));
-        t4 = new Treasure(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(1,10), new Random().Next(3,7));
-        t5 = new Treasure(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(1,10), new Random().Next(3,7));
-        b1 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,7));
-        b2 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,7));
-        b3 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,7));
-        b4 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,7));
-        b5 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,7));
+        t1 = new Treasure(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(1,10), new Random().Next(3,11));
+        t2 = new Treasure(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(1,10), new Random().Next(3,11));
+        t3 = new Treasure(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(1,10), new Random().Next(3,11));
+        t4 = new Treasure(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(1,10), new Random().Next(3,11));
+        t5 = new Treasure(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(1,10), new Random().Next(3,11));
+        b1 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,11));
+        b2 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,11));
+        b3 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,11));
+        b4 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,11));
+        b5 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,11));
+        b6 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,11));
+        b7 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,11));
+        b8 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,11));
+        b9 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,11));
+        b10 = new Bomb(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(3,11));
+        l = new Life(new Random().Next(0,SCREEN_WIDTH), 0, new Random().Next(1,2), new Random().Next(17,25));
         
         _gameObjects.Add(p);
         _gameObjects.Add(t1);
@@ -87,6 +99,12 @@ class GameManager
         _gameObjects.Add(b3);
         _gameObjects.Add(b4);
         _gameObjects.Add(b5);
+        _gameObjects.Add(b6);
+        _gameObjects.Add(b7);
+        _gameObjects.Add(b8);
+        _gameObjects.Add(b9);
+        _gameObjects.Add(b10);
+        _gameObjects.Add(l);
     }
 
     /// <summary>
@@ -108,11 +126,17 @@ class GameManager
         b3.Gravity();
         b4.Gravity();
         b5.Gravity();
+        b6.Gravity();
+        b7.Gravity();
+        b8.Gravity();
+        b9.Gravity();
+        b10.Gravity();
         t1.Gravity();
         t2.Gravity();
         t3.Gravity();
         t4.Gravity();
         t5.Gravity();
+        l.Gravity();
     
         for (int i = 0; i < _gameObjects.Count; i++)
         {
@@ -129,6 +153,10 @@ class GameManager
                         {
                             _points += second.GetValue();
                         }
+                        else if (second.GetGameObjectType() == "L")
+                        {
+                            _lives += second.GetValue();
+                        }
                         else
                         {
                             _lives--;
@@ -136,15 +164,32 @@ class GameManager
                     }
                    
                     second.SetNewPosition(new Random().Next(0,SCREEN_WIDTH), 0);
-                    second.SetSpeed(new Random().Next(3,7));
-                    second.SetValue(new Random().Next(1,10));
+                    if (_gameObjects[i].GetGameObjectType() == "L")
+                    {
+                        _gameObjects[i].SetSpeed(new Random().Next(17,25));
+                        _gameObjects[i].SetValue(new Random().Next(1,2));
+                    }
+                    else
+                    {
+                        _gameObjects[i].SetSpeed(new Random().Next(3,11));
+                        _gameObjects[i].SetValue(new Random().Next(1,10));
+                    }
                 }
             }
             if (_gameObjects[i].GetY() > SCREEN_HEIGHT)
             {
                 _gameObjects[i].SetNewPosition(new Random().Next(0,SCREEN_WIDTH), 0);
-                _gameObjects[i].SetSpeed(new Random().Next(3,7));
-                _gameObjects[i].SetValue(new Random().Next(1,10));
+                
+                if (_gameObjects[i].GetGameObjectType() == "L")
+                {
+                    _gameObjects[i].SetSpeed(new Random().Next(17,25));
+                    _gameObjects[i].SetValue(new Random().Next(1,2));
+                }
+                else
+                {
+                    _gameObjects[i].SetSpeed(new Random().Next(3,11));
+                    _gameObjects[i].SetValue(new Random().Next(1,10));
+                }
             }
         }
        if (_lives == 0)
